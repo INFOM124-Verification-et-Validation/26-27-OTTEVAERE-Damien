@@ -1,6 +1,7 @@
 package nl.tudelft.jpacman.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static nl.tudelft.jpacman.board.Direction.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,21 +18,25 @@ class DirectionTest {
      */
     @Test
     void testNorth() {
-        // TODO
+        Direction d = NORTH;
+        assertThat(d).isEqualTo(NORTH);
     }
 
     @Test
     void testSouth() {
-        // TODO
+        Direction d = SOUTH;
+        assertThat(d).isEqualTo(SOUTH);
     }
 
     @Test
     void testEast() {
-        // TODO
+        Direction d = EAST;
+        assertThat(d).isEqualTo(EAST);
     }
 
     @Test
     void testWest() {
-        // TODO
+        Direction d = WEST;
+        assertThat(d).isEqualTo(WEST);
     }
 }
