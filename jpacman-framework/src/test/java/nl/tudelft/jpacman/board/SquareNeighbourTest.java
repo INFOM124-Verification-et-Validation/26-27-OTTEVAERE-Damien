@@ -3,7 +3,10 @@ package nl.tudelft.jpacman.board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static nl.tudelft.jpacman.board.Direction.EAST;
+import static nl.tudelft.jpacman.board.Direction.WEST;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 /**
  * Test suite to confirm that {@link Square}s correctly link to and report
@@ -36,7 +39,8 @@ class SquareNeighbourTest {
      */
     @Test
     void testNoNeighbourByDefault() {
-        // TODO
+        Direction d = EAST;
+        assertThat(square.getSquareAt(d)).isEqualTo(null);
     }
 
     /**
@@ -45,7 +49,10 @@ class SquareNeighbourTest {
      */
     @Test
     void testLinkedNeighbour() {
-        // TODO
+        Direction d = EAST;
+        square.link(neighbour, d);
+
+        assertThat(square.getSquareAt(d)).isEqualTo(neighbour);
     }
 
     /**
@@ -54,6 +61,11 @@ class SquareNeighbourTest {
      */
     @Test
     void testLinkIsOneWay() {
-        // TODO
+        Direction d = EAST;
+        Direction reverse = WEST;
+        square.link(neighbour, d);
+
+        assertThat(square.getSquareAt(d)).isEqualTo(neighbour);
+        assertThat(neighbour.getSquareAt(reverse)).isNotEqualTo(square);
     }
 }
