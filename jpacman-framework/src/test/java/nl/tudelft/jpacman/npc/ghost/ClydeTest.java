@@ -46,11 +46,7 @@ class ClydeTest {
         Board b = parser.parseMap(Lists.newArrayList("###########", "#   C     #", "#    #    #", "# ##      #", "#     ### #", "#     P   #", "###########")).getBoard();
 
         Square clydePos = b.squareAt(4,1);
-        Direction d  = clyde.nextMove();
-
-        System.out.println(clydePos.getOccupants());
-        System.out.println(d);
-
+        //Direction d  = clyde.nextMove();
 
     }
 
