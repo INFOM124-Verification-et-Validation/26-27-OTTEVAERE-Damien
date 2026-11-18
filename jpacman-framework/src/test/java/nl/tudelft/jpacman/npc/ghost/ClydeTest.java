@@ -5,12 +5,10 @@ import nl.tudelft.jpacman.board.Board;
 import nl.tudelft.jpacman.board.BoardFactory;
 import nl.tudelft.jpacman.board.Direction;
 import nl.tudelft.jpacman.board.Square;
-import nl.tudelft.jpacman.level.Level;
-import nl.tudelft.jpacman.level.LevelFactory;
-import nl.tudelft.jpacman.level.MapParser;
-import nl.tudelft.jpacman.level.Pellet;
+import nl.tudelft.jpacman.level.*;
 import nl.tudelft.jpacman.npc.Ghost;
 import nl.tudelft.jpacman.sprite.PacManSprites;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -19,35 +17,92 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ClydeTest {
+    PacManSprites sprites;
+    GhostFactory ghostFactory;
+    LevelFactory levelFactory;
+    BoardFactory boardFactory;
+    GhostMapParser ghostMapParser;
+    Player player;
+    MapParser mapParser;
+    PlayerFactory playerFactory;
 
-    PacManSprites pacManSprites = new PacManSprites();
-    GhostFactory ghostFactory = new GhostFactory(pacManSprites);
-    LevelFactory levelFactory = new LevelFactory(pacManSprites, ghostFactory);
-    BoardFactory boardFactory = new BoardFactory(pacManSprites);
-    GhostMapParser ghostMapParser = new GhostMapParser(levelFactory, boardFactory, ghostFactory);
+    @BeforeEach
+    void setUp() {
+        this.sprites = new PacManSprites();
+        this.ghostFactory = new GhostFactory(sprites);
+        this.levelFactory = new LevelFactory(sprites, ghostFactory);
+        this.boardFactory = new BoardFactory(sprites);
+        this.ghostMapParser = new GhostMapParser(levelFactory, boardFactory, ghostFactory);
+        this.mapParser = new GhostMapParser(levelFactory, boardFactory, ghostFactory);
+        this.playerFactory = new PlayerFactory(sprites);
+        player = new PlayerFactory(sprites).createPacMan();
+    }
 
     /**
-     * si clyde à moins de 8 case, se rapproche, aussi non s'éloigne
-     *
-     * instancier une carte, clyde et un joueur, puis tester
+     * si clyde à moins de 8 case, s'éloigne, aussi non se rapproche
      */
     @Test
-    void directionTest(){
+    void clydeNextToPacman(){
+        List<String> map = new ArrayList<>();
+        map.add("###########");
+        map.add("#P    #   #");
+        map.add("#C#  #    #");
+        map.add("#    #    #");
+        map.add("#   # #   #");
+        map.add("#         #");
+        map.add("###########");
 
-        /* trouver la position de clyde et du joueur*/
-        Ghost clyde = ghostFactory.createClyde();
-        Pellet pellet = levelFactory.createPellet();
+        Level level = ghostMapParser.parseMap(map);
+        level.registerPlayer(player);
+        Clyde clyde = Navigation.findUnitInBoard(Clyde.class, level.getBoard());
 
-        /* map init */
-        PacManSprites sprites = new PacManSprites();
-        GhostMapParser parser = new GhostMapParser(levelFactory, boardFactory, ghostFactory);
-        Board b = parser.parseMap(Lists.newArrayList("###########", "#   C     #", "#    #    #", "# ##      #", "#     ### #", "#     P   #", "###########")).getBoard();
+        Optional<Direction> actualDir = clyde.nextAiMove();
+        Optional<Direction> expectedDir = Optional.of(Direction.SOUTH);
 
-        Square clydePos = b.squareAt(4,1);
-        //Direction d  = clyde.nextMove();
+        assertThat(actualDir).isEqualTo(expectedDir);
+    }
+    @Test
+    void clydeFarFromPacman(){
+        List<String> map = new ArrayList<>();
+        map.add("###########");
+        map.add("#P    #   #");
+        map.add("# #  #    #");
+        map.add("#    #    #");
+        map.add("#   # #  ##");
+        map.add("#        C#");
+        map.add("###########");
 
+        Level level = ghostMapParser.parseMap(map);
+        level.registerPlayer(player);
+        Clyde clyde = Navigation.findUnitInBoard(Clyde.class, level.getBoard());
+
+        Optional<Direction> actualDir = clyde.nextAiMove();
+        Optional<Direction> expectedDir = Optional.of(Direction.WEST);
+
+        assertThat(actualDir).isEqualTo(expectedDir);
+    }
+    @Test
+    void clydeStuck(){
+        List<String> map = new ArrayList<>();
+        map.add("###########");
+        map.add("#P    #   #");
+        map.add("# #  #    #");
+        map.add("#    #    #");
+        map.add("##  # #   #");
+        map.add("#C#       #");
+        map.add("###########");
+
+        Level level = ghostMapParser.parseMap(map);
+        level.registerPlayer(player);
+        Clyde clyde = Navigation.findUnitInBoard(Clyde.class, level.getBoard());
+
+        Optional<Direction> actualDir = clyde.nextAiMove();
+        Optional<Direction> expectedDir = Optional.empty();
+
+        assertThat(actualDir).isEqualTo(expectedDir);
     }
 
 
