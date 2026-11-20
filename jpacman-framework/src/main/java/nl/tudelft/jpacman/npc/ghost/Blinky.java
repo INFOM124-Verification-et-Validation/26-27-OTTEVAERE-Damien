@@ -37,7 +37,7 @@ import nl.tudelft.jpacman.sprite.Sprite;
  * Source: http://strategywiki.org/wiki/Pac-Man/Getting_Started
  * </p>
  *
- * @author Jeroen Roosen 
+ * @author Jeroen Roosen
  *
  */
 public class Blinky extends Ghost {
@@ -53,6 +53,10 @@ public class Blinky extends Ghost {
      */
     private static final int MOVE_INTERVAL = 250;
 
+    /**
+     * Incremental moveCount
+     */
+    private int moveCount = 12;
     /**
      * Creates a new "Blinky", a.k.a. "Shadow".
      *
@@ -84,6 +88,25 @@ public class Blinky extends Ghost {
 
         // TODO Blinky should patrol his corner every once in a while
         // TODO Implement his actual behaviour instead of simply chasing.
+        // chasing mode pendant 8 coups puis patrol mode pendant 4 coups
+        // si dans range 0 - 8: target = pacman,
+        // si range 8-12: target = top-right
+        // puis remise à zéro
+
+        if(0 < moveCount && moveCount <= 8){
+            System.out.println("====\nChase mode: mouvement: " + moveCount + "\n====");
+            moveCount--;
+        } else if (8 < moveCount && moveCount <= 12) {
+            System.out.println("====\nPatrol mode: movement: "+ moveCount + "\n====");
+            moveCount--;
+        }
+
+        assert moveCount >= 0;
+        assert moveCount <= 12;
+        if(moveCount==0){
+            moveCount = 12;
+        }
+
         Unit nearest = Navigation.findNearest(Player.class, getSquare());
         if (nearest == null) {
             return Optional.empty();
