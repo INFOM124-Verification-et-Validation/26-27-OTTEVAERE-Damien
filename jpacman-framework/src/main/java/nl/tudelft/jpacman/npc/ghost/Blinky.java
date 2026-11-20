@@ -1,8 +1,6 @@
 package nl.tudelft.jpacman.npc.ghost;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import nl.tudelft.jpacman.board.Direction;
 import nl.tudelft.jpacman.board.Square;
@@ -57,6 +55,14 @@ public class Blinky extends Ghost {
      * Incremental moveCount
      */
     private int moveCount = 12;
+     * Target position for blinky patrolling
+     */
+    private Square blinkyTarget = null;
+
+    /**
+     * Boolean to check if the BFS was already done
+     */
+    private boolean BFS = false;
     /**
      * Creates a new "Blinky", a.k.a. "Shadow".
      *
@@ -67,6 +73,53 @@ public class Blinky extends Ghost {
     // has no way to find out how many there are.
     public Blinky(Map<Direction, Sprite> spriteMap) {
         super(spriteMap, MOVE_INTERVAL, INTERVAL_VARIATION);
+    }
+
+     * @param current = spanw point of blinky
+     * @return visited=list of all the visited Squares
+     */
+    public Set<Square> getBlinkyTarget(Square current){
+        Set<Square> visited = new HashSet<>();
+        Queue<Square> toVisit = new ArrayDeque<>();
+        visited.add(current);
+        toVisit.add(current);
+        //System.out.println("Visited: " + visited);
+        while (!toVisit.isEmpty()) {
+            //System.out.println("Visited: " + toVisit);
+            Square square = toVisit.remove();
+            for(Direction direction : Direction.values()) {
+                if(isAccesibleToBlinky(square, direction)){
+                    Square target = square.getSquareAt(direction);
+                    if(target != null && visited.add(target)) {
+                        toVisit.add(target);
+                    }
+                }
+            }
+        }
+        return visited;
+    }
+
+    /**
+     * Checks whether a given square is accessible
+     * FOR blinky FROM a given direction
+     * @param position actual square to check
+     * @param direction
+     * @return boolean
+     */
+    public boolean isAccesibleToBlinky(Square position, Direction direction){
+        return position.getSquareAt(direction).isAccessibleTo(this);
+    }
+
+    /**
+     * Performs research in the computed list of path
+     * and updates the blinkyTarget
+     */
+    public void findTopSquare(){
+        Set<Square> squares = getBlinkyTarget(getSquare());
+        for(Square square : squares) {
+            blinkyTarget = square;
+        }
+        BFS = true;
     }
 
     /**
@@ -88,36 +141,43 @@ public class Blinky extends Ghost {
 
         // TODO Blinky should patrol his corner every once in a while
         // TODO Implement his actual behaviour instead of simply chasing.
-        // chasing mode pendant 8 coups puis patrol mode pendant 4 coups
-        // si dans range 0 - 8: target = pacman,
-        // si range 8-12: target = top-right
-        // puis remise à zéro
+        if(!BFS) {findTopSquare();}
 
         if(0 < moveCount && moveCount <= 8){
             System.out.println("====\nChase mode: mouvement: " + moveCount + "\n====");
             moveCount--;
-        } else if (8 < moveCount && moveCount <= 12) {
-            System.out.println("====\nPatrol mode: movement: "+ moveCount + "\n====");
+            System.out.println("Chase mode: mouvement: " + moveCount);
             moveCount--;
-        }
 
-        assert moveCount >= 0;
         assert moveCount <= 12;
-        if(moveCount==0){
-            moveCount = 12;
-        }
+            Unit nearest = Navigation.findNearest(Player.class, getSquare());
+            if (nearest == null) {
+                return Optional.empty();
+            }
+            assert nearest.hasSquare();
+            Square target = nearest.getSquare();
 
-        Unit nearest = Navigation.findNearest(Player.class, getSquare());
+            List<Direction> path = Navigation.shortestPath(getSquare(), target, this);
+            if (path != null && !path.isEmpty()) {
+                return Optional.ofNullable(path.get(0));
+            }
+
         if (nearest == null) {
-            return Optional.empty();
         }
-        assert nearest.hasSquare();
         Square target = nearest.getSquare();
+        else if (8 < moveCount && moveCount <= 12) {
+            System.out.println("Patrol mode: movement: "+ moveCount);
+            moveCount--;
 
-        List<Direction> path = Navigation.shortestPath(getSquare(), target, this);
         if (path != null && !path.isEmpty()) {
-            return Optional.ofNullable(path.get(0));
+            Square target = blinkyTarget;
+
+            List<Direction> path = Navigation.shortestPath(getSquare(), target, this);
+            if (path != null && !path.isEmpty()) {
+                return Optional.ofNullable(path.get(0));
+            }
         }
+
         return Optional.empty();
     }
 }
