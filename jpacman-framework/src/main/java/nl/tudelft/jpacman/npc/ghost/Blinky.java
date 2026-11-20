@@ -55,6 +55,8 @@ public class Blinky extends Ghost {
      * Incremental moveCount
      */
     private int moveCount = 12;
+
+    /**
      * Target position for blinky patrolling
      */
     private Square blinkyTarget = null;
@@ -75,6 +77,8 @@ public class Blinky extends Ghost {
         super(spriteMap, MOVE_INTERVAL, INTERVAL_VARIATION);
     }
 
+    /**
+     * Performs a BFS in every possible direction
      * @param current = spanw point of blinky
      * @return visited=list of all the visited Squares
      */
@@ -139,17 +143,12 @@ public class Blinky extends Ghost {
     public Optional<Direction> nextAiMove() {
         assert hasSquare();
 
-        // TODO Blinky should patrol his corner every once in a while
-        // TODO Implement his actual behaviour instead of simply chasing.
         if(!BFS) {findTopSquare();}
 
         if(0 < moveCount && moveCount <= 8){
-            System.out.println("====\nChase mode: mouvement: " + moveCount + "\n====");
-            moveCount--;
             System.out.println("Chase mode: mouvement: " + moveCount);
             moveCount--;
 
-        assert moveCount <= 12;
             Unit nearest = Navigation.findNearest(Player.class, getSquare());
             if (nearest == null) {
                 return Optional.empty();
@@ -162,14 +161,11 @@ public class Blinky extends Ghost {
                 return Optional.ofNullable(path.get(0));
             }
 
-        if (nearest == null) {
         }
-        Square target = nearest.getSquare();
         else if (8 < moveCount && moveCount <= 12) {
             System.out.println("Patrol mode: movement: "+ moveCount);
             moveCount--;
 
-        if (path != null && !path.isEmpty()) {
             Square target = blinkyTarget;
 
             List<Direction> path = Navigation.shortestPath(getSquare(), target, this);
@@ -177,6 +173,8 @@ public class Blinky extends Ghost {
                 return Optional.ofNullable(path.get(0));
             }
         }
+
+        if(moveCount==0){moveCount = 12;}
 
         return Optional.empty();
     }
