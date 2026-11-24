@@ -54,7 +54,7 @@ public class Blinky extends Ghost {
     /**
      * Incremental moveCount
      */
-    private int moveCount = 12;
+    public int moveCount = 12;
 
     /**
      * Target position for blinky patrolling
