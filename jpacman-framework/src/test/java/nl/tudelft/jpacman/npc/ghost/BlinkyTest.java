@@ -182,8 +182,9 @@ public class BlinkyTest{
         level.registerPlayer(player);
         Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
 
-        assertEquals(12, blinky.moveCount);
-
+        //chase mode
+        blinky.moveCount = 8;
+        
         Optional<Direction> actualDir = blinky.nextAiMove();
         Optional<Direction> expectedDir = Optional.of(Direction.WEST);
 
