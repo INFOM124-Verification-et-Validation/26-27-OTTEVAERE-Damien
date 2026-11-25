@@ -87,9 +87,7 @@ public class Blinky extends Ghost {
         Queue<Square> toVisit = new ArrayDeque<>();
         visited.add(current);
         toVisit.add(current);
-        //System.out.println("Visited: " + visited);
         while (!toVisit.isEmpty()) {
-            //System.out.println("Visited: " + toVisit);
             Square square = toVisit.remove();
             for(Direction direction : Direction.values()) {
                 if(isAccesibleToBlinky(square, direction)){
@@ -146,7 +144,6 @@ public class Blinky extends Ghost {
         if(!BFS) {findTopSquare();}
 
         if(0 < moveCount && moveCount <= 8){
-            System.out.println("Chase mode: mouvement: " + moveCount);
             moveCount--;
 
             Unit nearest = Navigation.findNearest(Player.class, getSquare());
@@ -157,13 +154,11 @@ public class Blinky extends Ghost {
             Square target = nearest.getSquare();
 
             List<Direction> path = Navigation.shortestPath(getSquare(), target, this);
+            System.out.println("direction de blinky: "+path);
             if (path != null && !path.isEmpty()) {
                 return Optional.ofNullable(path.get(0));
             }
-
-        }
-        else if (8 < moveCount && moveCount <= 12) {
-            System.out.println("Patrol mode: movement: "+ moveCount);
+        } else if (8 < moveCount && moveCount <= 12) {
             moveCount--;
 
             Square target = blinkyTarget;
@@ -173,7 +168,6 @@ public class Blinky extends Ghost {
                 return Optional.ofNullable(path.get(0));
             }
         }
-
         if(moveCount==0){moveCount = 12;}
 
         return Optional.empty();
