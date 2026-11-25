@@ -1,23 +1,17 @@
 package nl.tudelft.jpacman.npc.ghost;
 
-import com.google.common.collect.Lists;
-import nl.tudelft.jpacman.board.Board;
 import nl.tudelft.jpacman.board.BoardFactory;
 import nl.tudelft.jpacman.board.Direction;
-import nl.tudelft.jpacman.board.Square;
 import nl.tudelft.jpacman.level.*;
-import nl.tudelft.jpacman.npc.Ghost;
 import nl.tudelft.jpacman.sprite.PacManSprites;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ClydeTest {
     PacManSprites sprites;
