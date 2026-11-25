@@ -236,7 +236,25 @@ public class BlinkyTest{
 
         //assert que nextAiMove renvoit une erreur
         assertThatThrownBy(() -> blinky.nextAiMove()).isInstanceOf(AssertionError.class);
+    }
 
+    /**
+     * test the behaviour of nextAiMove when player has no square
+     */
+    @Test
+    void nearestIsNull(){
+        List<String> map = new ArrayList<>();
+        map.add("PG");
+
+        Level level = ghostMapParser.parseMap(map);
+        level.registerPlayer(player);
+        Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
+        player.leaveSquare();
+
+        //chase mode
+        blinky.moveCount = 5;
+        Optional<Direction> d = blinky.nextAiMove();
+        assertEquals(Optional.empty(), d);
     }
 
 }
