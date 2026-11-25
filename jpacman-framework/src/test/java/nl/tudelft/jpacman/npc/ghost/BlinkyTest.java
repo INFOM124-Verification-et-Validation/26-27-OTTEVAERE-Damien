@@ -26,7 +26,7 @@ public class BlinkyTest{
     Player player;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         this.pacManSprites = new PacManSprites();
         this.boardFactory = new BoardFactory(pacManSprites);
         this.ghostFactory = new GhostFactory(pacManSprites);
@@ -39,7 +39,7 @@ public class BlinkyTest{
      * expected: va à gauche pour se rapprocher
      */
     @Test
-    public void blinkyNextToPacman(){
+    void blinkyNextToPacman(){
         List<String> map = new ArrayList<>();
         map.add("###########");
         map.add("#P        #");
@@ -62,7 +62,7 @@ public class BlinkyTest{
      * expected: va à gauche pour se rapprocher
      */
     @Test
-    public void blinkyHomeCorner(){
+    void blinkyHomeCorner(){
         List<String> map = new ArrayList<>();
         map.add("###########");
         map.add("#P       G#");
@@ -83,7 +83,7 @@ public class BlinkyTest{
     }
 
     @Test
-    public void blinkyStuck(){
+    void blinkyStuck(){
         List<String> map = new ArrayList<>();
         map.add("###########");
         map.add("#P        #");
@@ -107,7 +107,7 @@ public class BlinkyTest{
      * Tests if moveCount goes from 12 to 0
      */
     @Test
-    public void testMoveCount(){
+    void testMoveCount(){
         List<String> map = new ArrayList<>();
         map.add("###########");
         map.add("#P       G#");
@@ -137,7 +137,7 @@ public class BlinkyTest{
      * 4 move in a row
      */
     @Test
-    public void blinkyPatrolling(){
+    void blinkyPatrolling(){
         List<String> map = new ArrayList<>();
         map.add("###########");
         map.add("#P   #    #");
@@ -164,7 +164,7 @@ public class BlinkyTest{
      * 8 move in a row
      */
     @Test
-    public void blinkyChassing(){
+    void blinkyChassing(){
         List<String> map = new ArrayList<>();
         map.add("###########");
         map.add("#P   #   G#");
