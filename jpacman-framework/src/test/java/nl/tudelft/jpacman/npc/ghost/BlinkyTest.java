@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BlinkyTest{
@@ -100,7 +101,7 @@ public class BlinkyTest{
         Level level = ghostMapParser.parseMap(map);
         level.registerPlayer(player);
         Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
-        
+
         Optional<Direction> actualDir = blinky.nextAiMove();
         Optional<Direction> expectedDir = Optional.empty();
 
@@ -191,5 +192,51 @@ public class BlinkyTest{
         assertThat(expectedDir).isEqualTo(actualDir);
     }
 
+    /**
+     * test the behaviour of nextAiMove when no player on the map
+     */
+    @Test
+    void nextAiMoveNoPlayer(){
+        List<String> map = new ArrayList<>();
+        map.add("###########");
+        map.add("#    #   G#");
+        map.add("#### # ## #");
+        map.add("#  #   ## #");
+        map.add("#   ### # #");
+        map.add("#         #");
+        map.add("###########");
+
+        Level level = ghostMapParser.parseMap(map);
+        //level.registerPlayer(player);
+        Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
+        //chase mode
+        blinky.moveCount = 8;
+
+        Optional<Direction> actualDir = blinky.nextAiMove();
+        Optional<Direction> expectedDir = Optional.empty();
+
+        assertThat(expectedDir).isEqualTo(actualDir);
+    }
+
+    /**
+     * test the behaviour of nextAiMove when blinky has no square
+     */
+    @Test
+    void blinkyHasNoSquare(){
+        List<String> map = new ArrayList<>();
+        map.add("PG");
+
+        Level level = ghostMapParser.parseMap(map);
+        //level.registerPlayer(player);
+        Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
+        blinky.leaveSquare();
+
+        //chase mode
+        blinky.moveCount = 8;
+
+        //assert que nextAiMove renvoit une erreur
+        assertThatThrownBy(() -> blinky.nextAiMove()).isInstanceOf(AssertionError.class);
+
+    }
 
 }
