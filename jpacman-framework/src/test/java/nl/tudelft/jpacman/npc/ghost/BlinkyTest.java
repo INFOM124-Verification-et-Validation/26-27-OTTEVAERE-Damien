@@ -36,7 +36,7 @@ public class BlinkyTest{
     }
 
     /**
-     * expected: va à gauche pour se rapprocher
+     * expected: blinky monte pour se rapprocher
      */
     @Test
     void blinkyNextToPacman(){
@@ -53,6 +53,8 @@ public class BlinkyTest{
         level.registerPlayer(player);
         Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
 
+        // chase mode
+        blinky.moveCount = 8;
         Optional<Direction> actualDir = blinky.nextAiMove();
         Optional<Direction> expectedDir = Optional.of(Direction.NORTH);
 
@@ -76,6 +78,8 @@ public class BlinkyTest{
         level.registerPlayer(player);
         Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
 
+        // chase mode
+        blinky.moveCount = 8;
         Optional<Direction> actualDir = blinky.nextAiMove();
         Optional<Direction> expectedDir = Optional.of(Direction.WEST);
 
@@ -96,7 +100,7 @@ public class BlinkyTest{
         Level level = ghostMapParser.parseMap(map);
         level.registerPlayer(player);
         Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
-
+        
         Optional<Direction> actualDir = blinky.nextAiMove();
         Optional<Direction> expectedDir = Optional.empty();
 
