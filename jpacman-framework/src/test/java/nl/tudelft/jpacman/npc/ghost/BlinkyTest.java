@@ -128,9 +128,10 @@ public class BlinkyTest{
 
         assertEquals(12, blinky.moveCount);
 
+        Optional<Direction> d;
         for(int i=12;i>=0;i--){
             assertEquals(i, blinky.moveCount);
-            Optional<Direction> d = blinky.nextAiMove();
+            d = blinky.nextAiMove();
         }
         assertEquals(12, blinky.moveCount);
 
@@ -207,7 +208,6 @@ public class BlinkyTest{
         map.add("###########");
 
         Level level = ghostMapParser.parseMap(map);
-        //level.registerPlayer(player);
         Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
         //chase mode
         blinky.moveCount = 8;
@@ -227,7 +227,6 @@ public class BlinkyTest{
         map.add("PG");
 
         Level level = ghostMapParser.parseMap(map);
-        //level.registerPlayer(player);
         Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
         blinky.leaveSquare();
 
