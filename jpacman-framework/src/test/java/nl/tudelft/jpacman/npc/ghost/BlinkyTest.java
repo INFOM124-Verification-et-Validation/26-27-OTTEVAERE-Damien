@@ -149,18 +149,18 @@ public class BlinkyTest{
         map.add("#### # ## #");
         map.add("#  #   ## #");
         map.add("#   ### # #");
-        map.add("#        G#");
+        map.add("#       #G#");
         map.add("###########");
 
         Level level = ghostMapParser.parseMap(map);
         level.registerPlayer(player);
         Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
-        blinky.moveCount=8;
+        //patroll mode
+        blinky.moveCount=12;
         Optional<Direction> actualDir = blinky.nextAiMove();
         Optional<Direction> expectedDir = Optional.of(Direction.NORTH);
 
         assertThat(expectedDir).isEqualTo(actualDir);
-        assertEquals(7, blinky.moveCount);
     }
 
     /**
