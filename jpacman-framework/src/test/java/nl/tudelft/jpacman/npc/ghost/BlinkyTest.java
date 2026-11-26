@@ -255,4 +255,40 @@ public class BlinkyTest{
         assertEquals(Optional.empty(), d);
     }
 
+    /**
+     * Test the behavior of path in chase mode
+     */
+    @Test
+    void pathIsNullChaseMode(){
+        List<String> map = new ArrayList<>();
+        map.add("P  ");
+        map.add("###");
+        map.add("#G#");
+        map.add("###");
+        Level level = ghostMapParser.parseMap(map);
+        level.registerPlayer(player);
+        Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
+        //chase mode
+        blinky.moveCount = 5;
+        Optional<Direction> d = blinky.nextAiMove();
+        assertEquals(Optional.empty(), d);
+    }
+
+    /**
+     * Test the behavior of path in patroll mode
+     */
+    @Test
+    void pathIsEmptyPatrollMode(){
+        List<String> map = new ArrayList<>();
+        map.add("G");
+        Level level = ghostMapParser.parseMap(map);
+        Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
+        //patroll mode
+        blinky.moveCount = 12;
+        Optional<Direction> d = blinky.nextAiMove();
+        assertEquals(Optional.empty(), d);
+    }
+
+
+
 }
