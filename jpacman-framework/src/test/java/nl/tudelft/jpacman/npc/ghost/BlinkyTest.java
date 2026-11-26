@@ -2,6 +2,7 @@ package nl.tudelft.jpacman.npc.ghost;
 
 import nl.tudelft.jpacman.board.BoardFactory;
 import nl.tudelft.jpacman.board.Direction;
+import nl.tudelft.jpacman.board.Square;
 import nl.tudelft.jpacman.level.Level;
 import nl.tudelft.jpacman.level.LevelFactory;
 import nl.tudelft.jpacman.level.Player;
@@ -274,6 +275,28 @@ public class BlinkyTest{
         assertEquals(Optional.empty(), d);
     }
 
+
+    /**
+     * Test the behavior of path in chase mode
+     */
+    @Test
+    void pathIsEmptyChaseMode(){
+        List<String> map = new ArrayList<>();
+        map.add("GP");
+
+        Level level = ghostMapParser.parseMap(map);
+        level.registerPlayer(player);
+        player.leaveSquare();
+        Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
+        Square s1 = blinky.getSquare();
+        player.occupy(s1);
+
+        //chase mode
+        blinky.moveCount = 8;
+        Optional<Direction> d = blinky.nextAiMove();
+        assertEquals(Optional.empty(), d);
+    }
+
     /**
      * Test the behavior of path in patroll mode
      */
@@ -281,14 +304,22 @@ public class BlinkyTest{
     void pathIsEmptyPatrollMode(){
         List<String> map = new ArrayList<>();
         map.add("G");
+
         Level level = ghostMapParser.parseMap(map);
         Blinky blinky = Navigation.findUnitInBoard(Blinky.class, level.getBoard());
-        //patroll mode
+
+        //chase mode
         blinky.moveCount = 12;
         Optional<Direction> d = blinky.nextAiMove();
         assertEquals(Optional.empty(), d);
     }
+    /**
+     * Test the behavior of path in patroll mode
+     */
+    @Test
+    void pathIsNullPatrollMode(){
 
+    }
 
 
 }
