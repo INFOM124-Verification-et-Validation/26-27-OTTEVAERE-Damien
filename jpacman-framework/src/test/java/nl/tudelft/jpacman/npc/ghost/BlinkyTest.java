@@ -233,7 +233,7 @@ public class BlinkyTest{
         blinky.moveCount = 8;
 
         //assert que nextAiMove renvoit une erreur
-        assertThatThrownBy(() -> blinky.nextAiMove()).isInstanceOf(AssertionError.class);
+        assertThatThrownBy(blinky::nextAiMove).isInstanceOf(AssertionError.class);
     }
 
     /**
