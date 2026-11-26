@@ -128,10 +128,9 @@ public class BlinkyTest{
 
         assertEquals(12, blinky.moveCount);
 
-        Optional<Direction> d;
         for(int i=12;i>=0;i--){
             assertEquals(i, blinky.moveCount);
-            d = blinky.nextAiMove();
+            blinky.nextAiMove();
         }
         assertEquals(12, blinky.moveCount);
 
