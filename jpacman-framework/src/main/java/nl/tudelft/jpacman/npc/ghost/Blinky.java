@@ -154,7 +154,6 @@ public class Blinky extends Ghost {
             Square target = nearest.getSquare();
 
             List<Direction> path = Navigation.shortestPath(getSquare(), target, this);
-            System.out.println("direction de blinky: "+path);
             if (path != null && !path.isEmpty()) {
                 return Optional.ofNullable(path.get(0));
             }
