@@ -62,9 +62,9 @@ public class Blinky extends Ghost {
     private Square blinkyTarget = null;
 
     /**
-     * Boolean to check if the BFS was already done
+     * Boolean to check if the bfs was already done
      */
-    private boolean BFS = false;
+    private boolean bfs = false;
     /**
      * Creates a new "Blinky", a.k.a. "Shadow".
      *
@@ -78,7 +78,7 @@ public class Blinky extends Ghost {
     }
 
     /**
-     * Performs a BFS in every possible direction
+     * Performs a bfs in every possible direction
      * @param current = spanw point of blinky
      * @return visited=list of all the visited Squares
      */
@@ -121,7 +121,7 @@ public class Blinky extends Ghost {
         for(Square square : squares) {
             blinkyTarget = square;
         }
-        BFS = true;
+        bfs = true;
     }
 
     /**
@@ -141,7 +141,7 @@ public class Blinky extends Ghost {
     public Optional<Direction> nextAiMove() {
         assert hasSquare();
 
-        if(!BFS) {findTopSquare();}
+        if(!bfs) {findTopSquare();}
 
         if(0 < moveCount && moveCount <= 8){
             moveCount--;
