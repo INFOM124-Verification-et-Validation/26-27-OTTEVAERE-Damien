@@ -144,6 +144,7 @@ public class Blinky extends Ghost {
         if(!bfs) {findTopSquare();}
 
         if(0 < moveCount && moveCount <= 8){
+            //Chase mode
             moveCount--;
 
             Unit nearest = Navigation.findNearest(Player.class, getSquare());
@@ -158,6 +159,7 @@ public class Blinky extends Ghost {
                 return Optional.ofNullable(path.get(0));
             }
         } else if (8 < moveCount && moveCount <= 12) {
+            //Patroll mode
             moveCount--;
 
             Square target = blinkyTarget;
